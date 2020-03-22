@@ -1,6 +1,7 @@
 #include "discrete.h"
 #include "def.h"
 
+extern double time;
 extern double dt;
 
 /**
@@ -9,10 +10,18 @@ extern double dt;
 void discrete_compute_vulnerable_slope(struct discrete *d, double
 		ncontagious)
 {
+	double actual_R0;
 	double vulnerable_frac;
 
 	vulnerable_frac = d->vulnerable / POPULATION;
-	d->d_vulnerable_dt = -1 * vulnerable_frac * R0 * ncontagious
+
+	if (time > MITIGATION_START_TIME) {
+		actual_R0 = MITIGATED_R0;
+	} else {
+		actual_R0 = R0;
+	}
+
+	d->d_vulnerable_dt = -1 * vulnerable_frac * actual_R0 * ncontagious
 		/ (CONTAG_T1 - CONTAG_T0);
 }
 

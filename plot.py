@@ -72,13 +72,11 @@ gs = gridspec.GridSpec(5, 2)
 
 for i in range(2):
 	ax = fig.add_subplot(gs[0,i])
-	ax.plot(time, ninfected/population, "C1.-")
-	ax.set_ylim([0,1])
+	ax.plot(time, ninfected, "C1.-")
 	if i == 1:
-		ax.set_ylim([1e-5,1])
 		ax.set_yscale("log")
 	ax.set_xlabel("day")
-	ax.set_ylabel("ninfected fraction")
+	ax.set_ylabel("ninfected")
 
 	ax = fig.add_subplot(gs[1,i])
 	ax.plot(time, vulnerable/population, "C0.-")
