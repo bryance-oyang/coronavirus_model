@@ -1,6 +1,7 @@
 # A dumb and simple disease model
 
-## Example
+## Examples
+![Example Image](example2.png)
 ![Example Image](example.png)
 
 ## Run
