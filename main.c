@@ -9,53 +9,28 @@
 double time;
 double dt;
 
-static void output(int epoch, struct infected *inf, struct discrete *d)
+/* initial condition */
+static void init(struct infected *inf, struct discrete *d)
 {
-	int i;
-	FILE *f;
-	char filename[BUFLEN];
+	inf->n[0] = INFECTED_SEED / NDAYPERCELL;
 
-	/* output infected */
-	sprintf(filename, "data/infected_%05d.dat", epoch);
-	
-	if ((f = fopen(filename, "w")) == NULL) {
-		fprintf(stderr, "fopen failed: %s\n", filename);
-		raise(SIGSEGV);
-	}
+	d->vulnerable = POPULATION - INFECTED_SEED;
+	d->recovered = 0;
+	d->dead = 0;
 
-	for (i = 0; i < NCELL; i++) {
-		fprintf(f, "%g %g\n", i*NDAYPERCELL, inf->n[i]);
-	}
-
-	fclose(f);
-
-	/* output discrete */
-	sprintf(filename, "data/discrete_%05d.dat", epoch);
-	
-	if ((f = fopen(filename, "w")) == NULL) {
-		fprintf(stderr, "fopen failed: %s\n", filename);
-		raise(SIGSEGV);
-	}
-
-	fprintf(f, "%g\n", time);
-	fprintf(f, "%g\n", (double)POPULATION + INFECTED_SEED);
-	fprintf(f, "%g\n", (double)CONTAG_T0);
-	fprintf(f, "%g\n", (double)CONTAG_T1);
-	fprintf(f, "%g\n", inf->ninfected);
-	fprintf(f, "%g\n", d->vulnerable);
-	fprintf(f, "%g\n", d->recovered);
-	fprintf(f, "%g\n", d->dead);
-
-	fclose(f);
+	infected_compute_total_infected(inf);
 }
 
+/**
+ * @brief do second order time integration
+ */
 void advance_timestep(struct infected *inf, struct discrete *d)
 {
 	int half_timestep;
 	double ncontagious;
 	double d_resolve_dt;
 
-	/* half timestep */
+	/* second order time integration */
 	for (half_timestep = 1; half_timestep >= 0; half_timestep--) {
 		/* new infections */
 		ncontagious = infected_get_ncontagious(inf);
@@ -75,17 +50,47 @@ void advance_timestep(struct infected *inf, struct discrete *d)
 	infected_compute_total_infected(inf);
 }
 
-/* initial condition */
-static void init(struct infected *inf, struct discrete *d)
+/* output data to textfiles */
+static void output(int epoch, struct infected *inf, struct discrete *d)
 {
-	inf->n[0] = INFECTED_SEED / NDAYPERCELL;
+	int i;
+	FILE *f;
+	char filename[BUFLEN];
 
-	d->vulnerable = POPULATION;
-	d->recovered = 0;
-	d->dead = 0;
+	/* output infected */
+	sprintf(filename, "data/infected_%05d.dat", epoch);
 
-	infected_compute_total_infected(inf);
+	if ((f = fopen(filename, "w")) == NULL) {
+		fprintf(stderr, "fopen failed: %s\n", filename);
+		raise(SIGSEGV);
+	}
+
+	for (i = 0; i < NCELL; i++) {
+		fprintf(f, "%g %g\n", i*NDAYPERCELL, inf->n[i]);
+	}
+
+	fclose(f);
+
+	/* output discrete */
+	sprintf(filename, "data/discrete_%05d.dat", epoch);
+
+	if ((f = fopen(filename, "w")) == NULL) {
+		fprintf(stderr, "fopen failed: %s\n", filename);
+		raise(SIGSEGV);
+	}
+
+	fprintf(f, "%g\n", time);
+	fprintf(f, "%g\n", (double)POPULATION + INFECTED_SEED);
+	fprintf(f, "%g\n", (double)CONTAG_T0);
+	fprintf(f, "%g\n", (double)CONTAG_T1);
+	fprintf(f, "%g\n", inf->ninfected);
+	fprintf(f, "%g\n", d->vulnerable);
+	fprintf(f, "%g\n", d->recovered);
+	fprintf(f, "%g\n", d->dead);
+
+	fclose(f);
 }
+
 
 int main()
 {
@@ -94,7 +99,7 @@ int main()
 	struct infected inf;
 	struct discrete d;
 
-	dt = fmin(CFLNUM * NDAYPERCELL, SUGGESTED_DT);
+	dt = fmin(CFL_NUM * NDAYPERCELL, SUGGESTED_DT);
 
 	/* initial condition */
 	noutput = 0;

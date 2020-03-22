@@ -1,3 +1,7 @@
+/** @file
+ * @brief allows tracking progress of infected, curve moves rightward
+ * at a speed of one
+ */
 #include "infected.h"
 #include <math.h>
 
@@ -9,6 +13,7 @@ static inline double slope_lim(double r)
 	return fmax(0, fmin(1, r));
 }
 
+/* first order reconstruction */
 static void reconstruct(struct infected *inf)
 {
 	int i;
@@ -36,6 +41,7 @@ static void reconstruct(struct infected *inf)
 	inf->nL[NCELL] = inf->n[NCELL-1];
 }
 
+/* calculate inter-cell currents */
 static void calculate_J(struct infected *inf)
 {
 	int i;
@@ -50,6 +56,11 @@ static void calculate_J(struct infected *inf)
 	}
 }
 
+/**
+ * @brief source term
+ *
+ * source term allows for earlier recovery/death
+ */
 static void calculate_src(struct infected *inf)
 {
 	int i;

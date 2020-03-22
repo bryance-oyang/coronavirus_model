@@ -37,7 +37,7 @@
 
 /* timing */
 #define SUGGESTED_DT 1000
-#define CFLNUM 0.36
+#define CFL_NUM 0.36
 #define MAX_EPOCH 1e12
 
 #define BUFLEN 1024
