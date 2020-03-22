@@ -54,7 +54,7 @@ for fnum in range(200):
 	ax.axvline(contag_t0, color="black")
 	ax.axvline(contag_t1, color="black")
 	ax.set_xlabel("days since infection")
-	ax.set_ylabel("infected number per day")
+	ax.set_ylabel("infected distribution (inverse day)")
 	ax.set_title("t = %.3f days" % (time[-1]));
 
 	gs.tight_layout(fig)
