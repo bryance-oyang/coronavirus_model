@@ -1,8 +1,8 @@
 # A dumb and simple disease model
 
 ## Examples
-![Example Image](example2.png)
 ![Example Image](example.png)
+![Example Image](example2.png)
 
 ## Run
 Modify parameters in `def.h` then

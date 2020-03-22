@@ -54,7 +54,7 @@ for fnum in range(200):
 	ax.axvline(contag_t0, color="black")
 	ax.axvline(contag_t1, color="black")
 	ax.set_xlabel("days since infection")
-	ax.set_ylabel("number per day")
+	ax.set_ylabel("infected number per day")
 	ax.set_title("t = %.3f days" % (time[-1]));
 
 	gs.tight_layout(fig)
@@ -72,7 +72,7 @@ gs = gridspec.GridSpec(5, 2)
 
 for i in range(2):
 	ax = fig.add_subplot(gs[0,i])
-	ax.plot(time, ninfected/population, "C0.-")
+	ax.plot(time, ninfected/population, "C1.-")
 	ax.set_ylim([0,1])
 	if i == 1:
 		ax.set_ylim([1e-5,1])
@@ -81,7 +81,7 @@ for i in range(2):
 	ax.set_ylabel("ninfected fraction")
 
 	ax = fig.add_subplot(gs[1,i])
-	ax.plot(time, vulnerable/population, "C1.-")
+	ax.plot(time, vulnerable/population, "C0.-")
 	ax.set_ylim([0,1])
 	if i == 1:
 		ax.set_ylim([1e-5,1])
