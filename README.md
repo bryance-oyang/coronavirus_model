@@ -1,5 +1,8 @@
 # A dumb and simple disease model
 
+## Example
+![Example Image](example.png)
+
 ## Run
 Modify parameters in `def.h` then
 ```
