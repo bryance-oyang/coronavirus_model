@@ -3,14 +3,14 @@
 
 #include <stddef.h>
 
+/* openmp parallelize parameters */
+#define NTHREAD 4
+#define THREAD_SCHEDULE static
+
 /** total population */
 #define POPULATION 4e8
 /** number infected at start */
 #define INFECTED_SEED 1000
-
-/* openmp parallelize parameters */
-#define NTHREAD 4
-#define THREAD_SCHEDULE static
 
 /* disease parameters */
 /** start of contagious phase after infected */
