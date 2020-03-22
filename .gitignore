@@ -1,0 +1,9 @@
+*.d
+*z.out
+*.o
+*.swp
+*.gch
+data/*
+img/*
+gmon.out
+.DS_Store
